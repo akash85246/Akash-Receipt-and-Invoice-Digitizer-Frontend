@@ -7,7 +7,7 @@ function MainLayout() {
     <>
       <Navbar />
       <AppInit />
-      <main className="container mx-auto px-4 mt-20"><Outlet /></main>
+      <main className="container mx-auto px-4 mt-20 min-h-[80vh]"><Outlet /></main>
       <Footer />
     </>
   );

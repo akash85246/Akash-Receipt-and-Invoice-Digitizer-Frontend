@@ -8,7 +8,7 @@ function Welcome() {
       </p>
         <div className="mt-6">
             <GoogleLoginButton />       
-        </div>                              1                               
+        </div>                
     </div>
   );
 }

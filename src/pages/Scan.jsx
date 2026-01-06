@@ -93,7 +93,7 @@ function Scan() {
   };
 
   return (
-    <div className="pt-16 min-h-screen  text-white">
+    <div className="pt-0 min-h-screen  text-white">
       
       <div className="relative h-[70vh] w-full ">
         <video
@@ -156,7 +156,7 @@ function Scan() {
           <button
             onClick={uploadFiles}
             disabled={loading}
-            className="w-full bg-[#38a8ae] text-white py-3 rounded-lg"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg"
           >
             {loading ? "Uploading..." : `Upload ${files.length} file(s)`}
           </button>

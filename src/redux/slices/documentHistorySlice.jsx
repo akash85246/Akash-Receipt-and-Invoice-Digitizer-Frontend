@@ -1,40 +1,49 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 export const fetchDocumentHistory = createAsyncThunk(
   "documentHistory/fetch",
-  async (_, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
       const res = await axios.get("/api/documents/history", {
+        params,
         withCredentials: true,
       });
-
-      return res.data.documents;
+      return res.data;
     } catch (err) {
       return rejectWithValue(
-        err.response?.data?.error || "Failed to load document history"
+        err.response?.data?.detail || "Failed to load documents"
       );
     }
   }
 );
+
 const documentHistorySlice = createSlice({
   name: "documentHistory",
   initialState: {
     documents: [],
+    count: 0,
+    page_size: 5,
+    total_pages: 0,
+    page: 1,
     loading: false,
     error: null,
+    selectedIds: [],
   },
   reducers: {
-    setDocumentHistory(state, action) {
-      state.documents = action.payload;
+    toggleSelect(state, action) {
+      const id = action.payload;
+      if (state.selectedIds.includes(id)) {
+        state.selectedIds = state.selectedIds.filter((x) => x !== id);
+      } else {
+        state.selectedIds.push(id);
+      }
     },
-    addDocuments(state, action) {
-      state.documents = [...action.payload, ...state.documents];
+    selectAll(state) {
+      state.selectedIds = state.documents.map((doc) => doc.id);
     },
-
-    clearHistory(state) {
-      state.documents = [];
+    clearSelection(state) {
+      state.selectedIds = [];
     },
   },
   extraReducers: (builder) => {
@@ -44,7 +53,12 @@ const documentHistorySlice = createSlice({
       })
       .addCase(fetchDocumentHistory.fulfilled, (state, action) => {
         state.loading = false;
-        state.documents = action.payload;
+        state.documents = action.payload.results;
+        state.count = action.payload.count;
+        state.total_pages = action.payload.total_pages;
+        state.page_size = action.payload.page_size;
+        state.page = action.payload.current_page;
+        state.error = null;
       })
       .addCase(fetchDocumentHistory.rejected, (state, action) => {
         state.loading = false;
@@ -53,10 +67,7 @@ const documentHistorySlice = createSlice({
   },
 });
 
-export const {
-  setDocumentHistory,
-  addDocuments,
-  clearHistory,
-} = documentHistorySlice.actions;
+export const { toggleSelect, clearSelection, selectAll } =
+  documentHistorySlice.actions;
 
 export default documentHistorySlice.reducer;
