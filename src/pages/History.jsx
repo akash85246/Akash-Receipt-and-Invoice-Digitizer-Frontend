@@ -28,7 +28,7 @@ function History() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { documents, loading, count, page_size, total_pages, selectedIds } =
+  const { documents, loading,total_pages, selectedIds } =
     useSelector((state) => state.documentHistory);
   const allIds = documents.map((d) => d.id);
   const allSelected =

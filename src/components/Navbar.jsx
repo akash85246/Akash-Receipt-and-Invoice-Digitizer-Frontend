@@ -21,6 +21,7 @@ export default function Navbar() {
 
   const logoutUser = async () => {
     dispatch(clearUser());
+    await axios.post("/api/auth/logout/", {}, { withCredentials: true });
     navigate("/welcome");
   };
 

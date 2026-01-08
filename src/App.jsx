@@ -22,6 +22,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="history" element={<History />} />
             <Route path="receipt/:id" element={<Receipt />} />
+            <Route path="invoice/:id" element={<Receipt />} />
             <Route path="scan" element={<Scan />} />
           </Route>
 
