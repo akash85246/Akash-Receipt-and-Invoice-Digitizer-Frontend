@@ -18,7 +18,7 @@ function GoogleLoginButton() {
         }
       );
 
-      dispatch(setUser(res.data.user));
+      dispatch(setUser({...res.data.user, accessToken: res.data.access }));
     } catch (error) {
       console.error("Login failed:", error);
     }

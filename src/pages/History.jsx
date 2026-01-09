@@ -28,8 +28,9 @@ function History() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { documents, loading,total_pages, selectedIds } =
-    useSelector((state) => state.documentHistory);
+  const { documents, loading, total_pages, selectedIds } = useSelector(
+    (state) => state.documentHistory
+  );
   const allIds = documents.map((d) => d.id);
   const allSelected =
     allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
@@ -128,10 +129,7 @@ function History() {
       });
 
       if (res.status === 200) {
-        console.log("Documents deleted successfully");
-
         dispatch(fetchDocumentHistory({ page, ...filters }));
-
         dispatch(clearSelection());
       }
     } catch (error) {
@@ -154,9 +152,9 @@ function History() {
   if (loading) return <p className="text-center mt-10">Loading…</p>;
 
   return (
-    <div className="max-w-7xl mx-auto p-4 space-y-6">
-      <div>
-        <h1 className="text-4xl font-black text-slate-900">
+    <section className="max-w-7xl mx-auto p-4 space-y-6">
+      <div className="mb-8">
+        <h1 className="text-4xl font-black leading-tight tracking-tight mb-2">
           Transaction History
         </h1>
         <p className="text-slate-500">
@@ -628,7 +626,11 @@ function History() {
             <button
               disabled={page === 1}
               onClick={() => setPage((p) => p - 1)}
-              className={`p-2 text-xs rounded-full border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed ${page === total_pages ? "cursor-not-allowed border-slate-200 text-slate-400": "border-slate-300 hover:bg-slate-100"}`}
+              className={`p-2 text-xs rounded-full border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed ${
+                page === total_pages
+                  ? "cursor-not-allowed border-slate-200 text-slate-400"
+                  : "border-slate-300 hover:bg-slate-100"
+              }`}
             >
               <ChevronLeft />
             </button>
@@ -650,7 +652,11 @@ function History() {
             <button
               disabled={page === total_pages || total_pages === 0}
               onClick={() => setPage((p) => p + 1)}
-              className={`p-2 text-sm rounded-full border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed ${page === total_pages ? "cursor-not-allowed border-slate-200 text-slate-400": "border-slate-300 hover:bg-slate-100"}`}
+              className={`p-2 text-sm rounded-full border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed ${
+                page === total_pages
+                  ? "cursor-not-allowed border-slate-200 text-slate-400"
+                  : "border-slate-300 hover:bg-slate-100"
+              }`}
             >
               <ChevronRight />
             </button>
@@ -688,7 +694,7 @@ function History() {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

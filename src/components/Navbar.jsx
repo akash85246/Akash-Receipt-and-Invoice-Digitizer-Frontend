@@ -75,7 +75,7 @@ export default function Navbar() {
                 </Link>
 
                 <Link to="/scan" className="flex items-center gap-1 nav-link bg-blue-500 text-white px-3 py-1.5 rounded-full hover:bg-blue-600 transition">
-                  <ScanLine size={18} /> Scan Receipt
+                  <ScanLine size={18} /> Scan & Upload
                 </Link>
 
                 {/* Logout icon */}
@@ -120,7 +120,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center gap-2"
                 >
-                  <ScanLine size={18} /> Scan
+                  <ScanLine size={18} /> Scan & Upload
                 </Link>
 
                 <button

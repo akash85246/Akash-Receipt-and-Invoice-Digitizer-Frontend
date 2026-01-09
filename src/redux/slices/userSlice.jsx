@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { a } from "framer-motion/client";
 
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
@@ -22,6 +23,7 @@ const initialState = {
   avatar: null,
   email: null,
   new_user: false,
+  accessToken: null,
   loading: false,
   error: null,
 };
@@ -36,6 +38,7 @@ const userSlice = createSlice({
       state.email = action.payload.email;
       state.username = action.payload.username;
       state.new_user = action.payload.new_user;
+      state.accessToken = action.payload.accessToken;
     },
     clearUser: (state) => {
       state.id = null;
@@ -45,6 +48,7 @@ const userSlice = createSlice({
       state.new_user = false;
       state.loading = false;
       state.error = null;
+      state.accessToken = null;
     },
   },
   extraReducers: (builder) => {
@@ -60,6 +64,7 @@ const userSlice = createSlice({
         state.email = action.payload.email;
         state.username = action.payload.username;
         state.new_user = action.payload.new_user;
+        state.accessToken = action.payload.accessToken;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;

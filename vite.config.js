@@ -5,7 +5,7 @@ import process from "node:process";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-
+  const VITE_BACKEND_URL = env.VITE_BACKEND_URL || "http://localhost:8000";
   return {
     plugins: [react(), tailwindcss()],
     server: {
@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       proxy: {
         "/api": {
-          target: env.VITE_BACKEND_URL,
+          target: VITE_BACKEND_URL,
           changeOrigin: true,
           secure: false,
         },

@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import {
-  Image,
   Store,
   ChartBarStacked,
   ChevronDown,
-  ChevronUp,
   CreditCard,
   Sparkles,
   Calendar,
@@ -26,28 +24,22 @@ function Receipt() {
   const [document, setDocument] = useState(null);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState("image");
-  const [items, setItems] = useState(document?.items || []);
-  const [category, setCategory] = useState(document?.category || "");
-  const [receiptNumber, setReceiptNumber] = useState(
-    document?.receipt_number || ""
+  const [items, setItems] = useState([]);
+  const [category, setCategory] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
+  const [taxAmount, setTaxAmount] = useState("");
+  const [paymentMode, setPaymentMode] = useState("");
+  const [expenseType, setExpenseType] = useState("personal"
   );
-  const [totalAmount, setTotalAmount] = useState(document?.total_amount || "");
-  const [taxAmount, setTaxAmount] = useState(document?.tax_amount || "");
-  const [paymentMode, setPaymentMode] = useState(document?.payment_mode || "");
-  const [expenseType, setExpenseType] = useState(
-    document?.expense_type || "personal"
+  const [merchant_name, setMerchantName] = useState(""
   );
-  const [merchant_name, setMerchantName] = useState(
-    document?.merchant_name || ""
-  );
-  const [date, setDate] = useState(document?.date || "");
+  const [date, setDate] = useState("");
   const [number, setNumber] = useState("");
 
   const addItem = () => {
     setItems((prev) => [...prev, { name: "", cost: "" }]);
   };
 
-  console.log("Document Data:", document);
   const Backend_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -67,7 +59,6 @@ function Receipt() {
         } else {
           setNumber(res.data.invoice_number || "");
         }
-        setReceiptNumber(res.data.receipt_number || "");
         setTotalAmount(res.data.total_amount || "");
         setTaxAmount(res.data.tax_amount || "");
         setPaymentMode(res.data.payment_mode || "");
@@ -196,6 +187,8 @@ function Receipt() {
       </span>
     );
   };
+
+  console.log("document", document);
   if (!document) {
     return <p className="text-center mt-10">Document not found</p>;
   }
@@ -291,7 +284,7 @@ function Receipt() {
               {viewMode === "image" ? (
                 <div className="flex justify-center items-center">
                   <img
-                    src={Backend_URL + document.ocr_metadata.processed_image}
+                    src={Backend_URL +"/"+ document.processed_image}
                     alt="Preprocessed Document"
                     className="max-h-[65vh] w-auto rounded-xl border bg-white object-contain shadow-sm"
                   />
@@ -495,7 +488,7 @@ function Receipt() {
                   </p>
                 </div>
 
-                {(document.invoice_number || document.receipt_number) && (
+                {(number) && (
                   <div>
                     <label className="block text-[0.8rem] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
                       {document.type === "invoice"
@@ -681,10 +674,10 @@ function Receipt() {
                     <button
                       type="button"
                       onClick={() =>
-                        setDocument({ ...document, expense_type: "business" })
+                        setExpenseType("business")
                       }
                       className={`px-4 py-1.5 rounded-md text-[0.8rem] font-bold transition-all ${
-                        document.expense_type === "business"
+                        expenseType === "business"
                           ? "bg-white shadow-sm text-primary"
                           : "text-slate-500 hover:text-slate-700"
                       }`}
@@ -695,11 +688,11 @@ function Receipt() {
                     <button
                       type="button"
                       onClick={() =>
-                        setDocument({ ...document, expense_type: "personal" })
+                        setExpenseType("personal")
                       }
                       className={`px-4 py-1.5 rounded-md text-[0.8rem] font-bold transition-all ${
-                        document.expense_type === "personal" ||
-                        document.expense_type === undefined
+                        expenseType === "personal" ||
+                        expenseType === undefined
                           ? "bg-white shadow-sm text-primary"
                           : "text-slate-500 hover:text-slate-700"
                       }`}
