@@ -108,153 +108,162 @@ function Scan() {
   };
 
   return (
-    <section className="max-w-7xl mx-auto p-4 pb-0 space-y-6">
-      <div className="flex-1 ">
-        <div className="mb-8">
-          <h1 className="text-4xl font-black leading-tight tracking-tight mb-2">
-            Scanner &amp; Upload
-          </h1>
-          <p className="text-[#617289]  text-base font-normal">
-            Capture or upload your receipts and invoices for instant
-            digitization.
-          </p>
-        </div>
+    <>
+      <section className="max-w-7xl mx-auto p-4 pb-0 space-y-6">
+        <div className="flex-1 ">
+          <div className="mb-8">
+            <h1 className="text-4xl font-black leading-tight tracking-tight mb-2">
+              Scanner &amp; Upload
+            </h1>
+            <p className="text-[#617289]  text-base font-normal">
+              Capture or upload your receipts and invoices for instant
+              digitization.
+            </p>
+          </div>
 
-        {loading ? (
-          <UploadLogs loading={loading} setLoading={setLoading} />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-            <div className="glass-card rounded-xl p-6 flex flex-col gap-4 min-h-[400px]] bg-white ">
-              <h3 className="text-lg font-bold flex items-center gap-2 mb-2">
-                <Camera className="text-primary" />
-                Click Photo
-              </h3>
-              <div className="relative flex-1 bg-black rounded-lg overflow-hidden flex items-center justify-center group">
-                <div className="absolute inset-0 opacity-40 bg-cover bg-center" />
-                <div className="absolute inset-8 border-2 border-white/30 rounded-md pointer-events-none">
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary"></div>
-                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary"></div>
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary"></div>
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary"></div>
-                </div>
-
-                <div className="z-10 text-center px-6">
-                  <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-white border-4 border-primary p-1 shadow-xl hover:scale-105 transition-transform">
-                    <div className="h-full w-full rounded-full bg-primary flex items-center justify-center">
-                      <Camera className="text-white" size={36} />
-                    </div>
+          {loading ? (
+            <UploadLogs loading={loading} setLoading={setLoading} />
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+              <div className="glass-card rounded-xl p-6 flex flex-col gap-4 min-h-[400px]] bg-white ">
+                <h3 className="text-lg font-bold flex items-center gap-2 mb-2">
+                  <Camera className="text-primary" />
+                  Click Photo
+                </h3>
+                <div className="relative flex-1 bg-black rounded-lg overflow-hidden flex items-center justify-center group">
+                  <div className="absolute inset-0 opacity-40 bg-cover bg-center" />
+                  <div className="absolute inset-8 border-2 border-white/30 rounded-md pointer-events-none">
+                    <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary"></div>
+                    <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary"></div>
+                    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary"></div>
+                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary"></div>
                   </div>
 
-                  <p className="text-lg text-white font-bold mb-1">
-                    Capture receipt using camera
-                  </p>
-                  <p className="text-sm text-white mb-6">
-                    Opens your device camera to instantly scan receipts or
-                    invoices
-                  </p>
+                  <div className="z-10 text-center px-6">
+                    <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-white border-4 border-primary p-1 shadow-xl hover:scale-105 transition-transform">
+                      <div className="h-full w-full rounded-full bg-primary flex items-center justify-center">
+                        <Camera className="text-white" size={36} />
+                      </div>
+                    </div>
 
-                  {/* Action Button */}
-                  <button
-                    type="button"
-                    disabled={loading || totalFilesSize >= 20 * 1024 * 1024}
-                    onClick={handleToggleCamera}
-                    className={`px-6 py-2.5 rounded-lg font-bold transition-all duration-200 active:scale-[0.98] ${
-                      loading || totalFilesSize >= 20 * 1024 * 1024
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-primary text-white hover:bg-primary/90"
-                    }`}
-                  >
-                    Open Camera
-                  </button>
+                    <p className="text-lg text-white font-bold mb-1">
+                      Capture receipt using camera
+                    </p>
+                    <p className="text-sm text-white mb-6">
+                      Opens your device camera to instantly scan receipts or
+                      invoices
+                    </p>
+
+                    {/* Action Button */}
+                    <button
+                      type="button"
+                      disabled={loading || totalFilesSize >= 20 * 1024 * 1024}
+                      onClick={handleToggleCamera}
+                      className={`px-6 py-2.5 rounded-lg font-bold transition-all duration-200 active:scale-[0.98] ${
+                        loading || totalFilesSize >= 20 * 1024 * 1024
+                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          : "bg-primary text-white hover:bg-primary/90"
+                      }`}
+                    >
+                      Open Camera
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="glass-card rounded-xl p-6 flex flex-col gap-4 min-h-100 bg-white">
-              <h3 className="text-lg font-bold flex items-center gap-2 mb-2">
-                <FileUpIcon className="text-primary" />
-                Upload Document
-              </h3>
+              <div className="glass-card rounded-xl p-6 flex flex-col gap-4 min-h-100 bg-white">
+                <h3 className="text-lg font-bold flex items-center gap-2 mb-2">
+                  <FileUpIcon className="text-primary" />
+                  Upload Document
+                </h3>
 
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}
-                className={`flex-1 border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-8 cursor-pointer transition-all
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={onDragOver}
+                  onDragLeave={onDragLeave}
+                  onDrop={onDrop}
+                  className={`flex-1 border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-8 cursor-pointer transition-all
           ${
             isDragging
               ? "border-primary bg-primary/15 scale-[1.01]"
               : "border-primary/40 bg-primary/5 hover:bg-primary/10"
           }
         `}
-              >
-                <div className="bg-primary/20 p-4 rounded-full mb-4 group-hover:scale-110 transition-transform">
-                  <CloudUploadIcon className="text-primary" size={36} />
-                </div>
-
-                <p className="text-lg font-bold mb-1">
-                  Drop receipts or invoices here
-                </p>
-                <p className="text-sm text-[#617289] mb-6">
-                  Supports PDF, PNG, JPG (up to 20MB)
-                </p>
-
-                <button
-                  type="button"
-                  disabled={loading || totalFilesSize >= 20 * 1024 * 1024}
-                  className={`px-6 py-2.5 rounded-lg font-bold transition-all duration-200 active:scale-[0.98] ${
-                    loading || totalFilesSize >= 20 * 1024 * 1024
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-primary text-white hover:bg-primary/90"
-                  }`}
                 >
-                  Browse Files
-                </button>
+                  <div className="bg-primary/20 p-4 rounded-full mb-4 group-hover:scale-110 transition-transform">
+                    <CloudUploadIcon className="text-primary" size={36} />
+                  </div>
 
-                {/* Hidden input */}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  accept="image/png,image/jpeg,application/pdf"
-                  hidden
-                  onChange={handleFileSelect}
-                />
+                  <p className="text-lg font-bold mb-1">
+                    Drop receipts or invoices here
+                  </p>
+                  <p className="text-sm text-[#617289] mb-6">
+                    Supports PDF, PNG, JPG (up to 20MB)
+                  </p>
+
+                  <button
+                    type="button"
+                    disabled={loading || totalFilesSize >= 20 * 1024 * 1024}
+                    className={`px-6 py-2.5 rounded-lg font-bold transition-all duration-200 active:scale-[0.98] ${
+                      loading || totalFilesSize >= 20 * 1024 * 1024
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-primary text-white hover:bg-primary/90"
+                    }`}
+                  >
+                    Browse Files
+                  </button>
+
+                  {/* Hidden input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept="image/png,image/jpeg,application/pdf"
+                    hidden
+                    onChange={handleFileSelect}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="mb-10">
-          <div className="flex items-center justify-between px-4 pb-4">
-            <h2 className="text-[22px] font-bold tracking-tight">
-              Selected Documents ({files.length})
-            </h2>
-            <button
-              className="text-primary text-sm font-bold hover:underline"
-              onClick={() => setFiles([])}
-            >
-              Clear All
-            </button>
-          </div>
-          <div className="space-y-3 max-h-90 overflow-auto">
-            {files.map((file, index) => (
-              <ListItem
-                key={index}
-                file={file}
-                onRemove={() => removeFile(index)}
-              />
-            ))}
-            {files.length === 0 && (
-              <p className="text-center text-[#617289] py-10">
-                No documents selected.
-              </p>
-            )}
+          <div className="mb-10">
+            <div className="flex items-center justify-between px-4 pb-4">
+              <h2 className="text-[22px] font-bold tracking-tight">
+                Selected Documents ({files.length})
+              </h2>
+              <button
+                className="text-primary text-sm font-bold hover:underline"
+                onClick={() => setFiles([])}
+              >
+                Clear All
+              </button>
+            </div>
+            <div className="space-y-3 max-h-90 overflow-auto">
+              {files.map((file, index) => (
+                <ListItem
+                  key={index}
+                  file={file}
+                  onRemove={() => removeFile(index)}
+                />
+              ))}
+              {files.length === 0 && (
+                <p className="text-center text-[#617289] py-10">
+                  No documents selected.
+                </p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
+        <CameraModal
+          isCameraOpen={isCameraOpen}
+          onClose={handleToggleCamera}
+          setFiles={setFiles}
+          totalFilesSize={totalFilesSize}
+          setTotalFilesSize={setTotalFilesSize}
+        />
+      </section>
       {/* Footer */}
       <div className=" bg-white/80  backdrop-blur-md border-t border-gray-200  px-6 py-4 flex justify-center items-center z-50">
         <div className="max-w-240 w-full flex items-center justify-between">
@@ -293,14 +302,7 @@ function Scan() {
           </button>
         </div>
       </div>
-      <CameraModal
-        isCameraOpen={isCameraOpen}
-        onClose={handleToggleCamera}
-        setFiles={setFiles}
-        totalFilesSize={totalFilesSize}
-        setTotalFilesSize={setTotalFilesSize}
-      />
-    </section>
+    </>
   );
 }
 
@@ -312,7 +314,7 @@ function ListItem({ file, onRemove }) {
   return (
     <div className="flex items-center gap-4 bg-white px-4 min-h-18 py-3 justify-between rounded-xl border border-gray-100 shadow-sm">
       <div
-        className="flex items-center gap-4"
+        className="flex items-center gap-4 cursor-pointer"
         onClick={() => {
           setPreviewFile(file);
           setIsPreviewOpen(true);

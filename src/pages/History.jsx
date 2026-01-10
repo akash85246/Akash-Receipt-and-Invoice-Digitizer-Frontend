@@ -21,6 +21,11 @@ import {
   Home,
   Wallet,
   HelpCircle,
+  Stethoscope,
+  GraduationCap,
+  Film,
+  Briefcase,
+  Zap,
 } from "lucide-react";
 import axios from "axios";
 
@@ -59,27 +64,71 @@ function History() {
   });
 
   const CATEGORY_ICON_MAP = {
-    Food: {
+    food: {
+      label: "Food",
       icon: Utensils,
       color: "text-orange-600",
       bg: "bg-orange-100",
     },
-    Travel: {
+
+    travel: {
+      label: "Travel",
       icon: Plane,
       color: "text-blue-600",
       bg: "bg-blue-100",
     },
-    Shopping: {
+
+    shopping: {
+      label: "Shopping",
       icon: ShoppingBag,
       color: "text-purple-600",
       bg: "bg-purple-100",
     },
-    Utilities: {
+
+    medical: {
+      label: "Medical",
+      icon: Stethoscope,
+      color: "text-red-600",
+      bg: "bg-red-100",
+    },
+
+    education: {
+      label: "Education",
+      icon: GraduationCap,
+      color: "text-indigo-600",
+      bg: "bg-indigo-100",
+    },
+
+    entertainment: {
+      label: "Entertainment",
+      icon: Film,
+      color: "text-pink-600",
+      bg: "bg-pink-100",
+    },
+
+    housing: {
+      label: "Housing",
       icon: Home,
       color: "text-green-600",
       bg: "bg-green-100",
     },
-    Other: {
+
+    business: {
+      label: "Business",
+      icon: Briefcase,
+      color: "text-yellow-600",
+      bg: "bg-yellow-100",
+    },
+
+    utilities: {
+      label: "Utilities",
+      icon: Zap,
+      color: "text-cyan-600",
+      bg: "bg-cyan-100",
+    },
+
+    other: {
+      label: "Other",
       icon: Wallet,
       color: "text-slate-600",
       bg: "bg-slate-100",
@@ -148,6 +197,35 @@ function History() {
   };
 
   const { start, end } = getPageWindow();
+  console.log(documents);
+  const CURRENCY_CODE_TO_SYMBOL = {
+    INR: "₹",
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    CNY: "¥",
+    KRW: "₩",
+    RUB: "₽",
+    TRY: "₺",
+    VND: "₫",
+    PHP: "₱",
+    ILS: "₪",
+    NGN: "₦",
+    UAH: "₴",
+    CRC: "₡",
+    PYG: "₲",
+    KZT: "₸",
+    THB: "฿",
+    LAK: "₭",
+    MNT: "₮",
+    KHR: "៛",
+    BDT: "৳",
+    BTC: "₿",
+    ETH: "Ξ",
+    LTC: "Ł",
+    DOGE: "Ð",
+  };
 
   if (loading) return <p className="text-center mt-10">Loading…</p>;
 
@@ -172,7 +250,7 @@ function History() {
               </div>
               <input
                 className="flex w-full min-w-0 flex-1 resize-none bg-transparent border-none text-slate-900 placeholder:text-slate-400 px-4 text-base font-normal focus:ring-0 h-full focus:outline-none"
-                placeholder="Search merchant, date, amount"
+                placeholder="Search merchant, date(YYYY-DD-MM), amount"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
@@ -606,7 +684,10 @@ function History() {
                   </td>
 
                   <td className="p-4 text-center font-mono font-semibold text-slate-900">
-                    {doc.total_amount ? `₹${doc.total_amount}` : "—"}
+                    {doc.currency && CURRENCY_CODE_TO_SYMBOL[doc.currency]
+                      ? CURRENCY_CODE_TO_SYMBOL[doc.currency]
+                      : "₹"}
+                    {doc.total_amount ? `${doc.total_amount}` : "—"}
                   </td>
                 </tr>
               ))}

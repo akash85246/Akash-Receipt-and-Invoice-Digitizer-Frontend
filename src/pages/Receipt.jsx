@@ -29,12 +29,12 @@ function Receipt() {
   const [totalAmount, setTotalAmount] = useState("");
   const [taxAmount, setTaxAmount] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
-  const [expenseType, setExpenseType] = useState("personal"
-  );
-  const [merchant_name, setMerchantName] = useState(""
-  );
+  const [expenseType, setExpenseType] = useState("personal");
+  const [merchant_name, setMerchantName] = useState("");
   const [date, setDate] = useState("");
   const [number, setNumber] = useState("");
+  const [loadingSave, setLoadingSave] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   const addItem = () => {
     setItems((prev) => [...prev, { name: "", cost: "" }]);
@@ -188,7 +188,64 @@ function Receipt() {
     );
   };
 
-  console.log("document", document);
+  const SaveAndVerifyReceipt = async () => {
+    try {
+      setLoadingSave(true);
+      const payload = {
+        category,
+        items,
+        total_amount: totalAmount,
+        tax_amount: taxAmount,
+        payment_mode: paymentMode,
+        expense_type: expenseType,
+        merchant_name,
+        date,
+        receipt_number: number,
+        is_reviewed: true,
+      };
+
+      const res = await axios.put(
+        `/api/${document.type}/update/${id}/`,
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.status === 200) {
+        setDocument((prev) => ({
+          ...prev,
+          ...payload,
+          is_reviewed: true,
+        }));
+      } else {
+        console.error("Failed to save and verify receipt", res);
+      }
+      setLoadingSave(false);
+    } catch (err) {
+      setLoadingSave(false);
+      console.error("Failed to save and verify receipt", err);
+    }
+  };
+
+  const DeleteDocument = async () => {
+    try {
+      setLoadingDelete(true);
+      const res = await axios.delete(`/api/${document.type}/delete/${id}/`, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        window.location.href = "/history";
+      } else {
+        console.error("Failed to delete document", res);
+      }
+      setLoadingDelete(false);
+    } catch (err) {
+      setLoadingDelete(false);
+      console.error("Failed to delete document", err);
+    }
+  };
+
   if (!document) {
     return <p className="text-center mt-10">Document not found</p>;
   }
@@ -284,7 +341,7 @@ function Receipt() {
               {viewMode === "image" ? (
                 <div className="flex justify-center items-center">
                   <img
-                    src={Backend_URL +"/"+ document.processed_image}
+                    src={Backend_URL + "/" + document.processed_image}
                     alt="Preprocessed Document"
                     className="max-h-[65vh] w-auto rounded-xl border bg-white object-contain shadow-sm"
                   />
@@ -488,7 +545,7 @@ function Receipt() {
                   </p>
                 </div>
 
-                {(number) && (
+                {number && (
                   <div>
                     <label className="block text-[0.8rem] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
                       {document.type === "invoice"
@@ -584,6 +641,9 @@ function Receipt() {
                           <th className="px-4 py-2 text-right text-[0.8rem] font-semibold text-slate-500 uppercase tracking-wider">
                             Cost
                           </th>
+                          <th className="px-4 py-2 text-right text-[0.8rem] font-semibold text-slate-500 uppercase tracking-wider">
+                            Delete
+                          </th>
                         </tr>
                       </thead>
 
@@ -633,6 +693,19 @@ function Receipt() {
                                   className="w-24 text-right bg-transparent focus:outline-none"
                                 />
                               </td>
+                              <td className="px-4 py-2 text-right">
+                                <button
+                                  onClick={() => {
+                                    const updated = items.filter(
+                                      (_, index) => index !== idx
+                                    );
+                                    setItems(updated);
+                                  }}
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  <Trash2Icon className="mx-auto" size={16} />
+                                </button>
+                              </td>
                             </tr>
                           ))
                         ) : (
@@ -673,9 +746,7 @@ function Receipt() {
                   <div className="flex bg-slate-200 p-1 rounded-lg">
                     <button
                       type="button"
-                      onClick={() =>
-                        setExpenseType("business")
-                      }
+                      onClick={() => setExpenseType("business")}
                       className={`px-4 py-1.5 rounded-md text-[0.8rem] font-bold transition-all ${
                         expenseType === "business"
                           ? "bg-white shadow-sm text-primary"
@@ -687,12 +758,9 @@ function Receipt() {
 
                     <button
                       type="button"
-                      onClick={() =>
-                        setExpenseType("personal")
-                      }
+                      onClick={() => setExpenseType("personal")}
                       className={`px-4 py-1.5 rounded-md text-[0.8rem] font-bold transition-all ${
-                        expenseType === "personal" ||
-                        expenseType === undefined
+                        expenseType === "personal" || expenseType === undefined
                           ? "bg-white shadow-sm text-primary"
                           : "text-slate-500 hover:text-slate-700"
                       }`}
@@ -733,25 +801,50 @@ function Receipt() {
           </div>
 
           <div className="p-6 py-4 bg-white  border-t border-slate-200  flex flex-col gap-4">
-            <button className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-primary/30 transition-all active:scale-[0.98]">
-              <CircleCheck className="text-[18px]  bg-white text-blue-400 rounded-full" />
-              Save &amp; Verify{" "}
-              {document.type === "invoice" ? "Invoice" : "Receipt"}
+            <button
+              onClick={SaveAndVerifyReceipt}
+              disabled={loadingSave}
+              className={`text-white w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold transition-all duration-200 ease-out ${ loadingSave ? "bg-primary/60 cursor-not-allowed shadow-none" : "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 active:scale-[0.98]"}`}
+            >
+              {loadingSave ? (
+                <>
+                  <span className="w-5 h-5 border-2 border-white/80 border-t-transparent rounded-full animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <CircleCheck className="text-[18px] bg-white text-blue-400 rounded-full" />
+                  <span>
+                    {document.is_reviewed ? "Update" : "Save & Verify"}{" "}
+                    {document.type === "invoice" ? "Invoice" : "Receipt"}
+                  </span>
+                </>
+              )}
             </button>
             <div className="flex gap-3">
               <button className="flex-1 flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200  text-slate-700  font-semibold py-2.5 px-4 rounded-xl transition-all border border-transparent ">
                 <FileText className="text-[18px]" />
-                <span className="text-xs">PDF</span>
+                <span className="text-xs">JSON</span>
               </button>
               <button className="flex-1 flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200  text-slate-700  font-semibold py-2.5 px-4 rounded-xl transition-all border border-transparent ">
                 <FileBracesCorner className="text-[18px]" />
                 <span className="text-xs">CSV</span>
               </button>
               <button
-                className="px-3 flex items-center justify-center bg-white hover:bg-slate-50  text-slate-400 hover:text-red-500 border border-slate-200  rounded-xl transition-all"
-                title="Delete Receipt"
+                onClick={DeleteDocument}
+                disabled={loadingDelete}
+                title={loadingDelete ? "Deleting..." : "Delete Receipt"}
+                className={`px-3  flex items-center justify-center rounded-xl border transition-all duration-200 ease-out${
+                  loadingDelete
+                    ? "bg-red-50 border-red-200 text-red-400 cursor-not-allowed"
+                    : "bg-white border-slate-200 text-slate-400 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                }`}
               >
-                <Trash2Icon className="text-[18px]" />
+                {loadingDelete ? (
+                  <span className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Trash2Icon className="text-[18px]" />
+                )}
               </button>
             </div>
           </div>

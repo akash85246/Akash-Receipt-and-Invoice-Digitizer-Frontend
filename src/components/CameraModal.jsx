@@ -10,7 +10,13 @@ import {
   Info,
 } from "lucide-react";
 
-function CameraModal({ isCameraOpen, onClose, setFiles ,totalFilesSize,setTotalFilesSize}) {
+function CameraModal({
+  isCameraOpen,
+  onClose,
+  setFiles,
+  totalFilesSize,
+  setTotalFilesSize,
+}) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
@@ -111,7 +117,7 @@ function CameraModal({ isCameraOpen, onClose, setFiles ,totalFilesSize,setTotalF
     ctx.drawImage(video, 0, 0);
 
     const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
-    if( totalFilesSize + dataURLtoBlob(dataUrl).size > 20 * 1024 * 1024){
+    if (totalFilesSize + dataURLtoBlob(dataUrl).size > 20 * 1024 * 1024) {
       alert("Total file size exceeds 20MB limit.");
       return;
     }
@@ -133,7 +139,7 @@ function CameraModal({ isCameraOpen, onClose, setFiles ,totalFilesSize,setTotalF
               </span>
             </div>
           </div>
-          
+
           {/* Camera Preview */}
 
           <div className="relative flex-1 bg-black">
@@ -146,79 +152,87 @@ function CameraModal({ isCameraOpen, onClose, setFiles ,totalFilesSize,setTotalF
 
             {/* Camera Controls */}
             <div className="absolute bottom-65 left-1/2 -translate-x-1/2 flex items-center gap-6">
+              {/* Flip Camera */}
               <button
                 onClick={() =>
                   setFacingMode((p) =>
                     p === "environment" ? "user" : "environment"
                   )
                 }
-                className="bg-white/90 p-3 rounded-full"
+                className="  bg-white/80 backdrop-blur-md p-3 rounded-full shadow-lg shadow-black/10 transition-all duration-200 ease-out hover:scale-110 hover:bg-white active:scale-95 ring-1 ring-white/40"
               >
-                <RotateCcw />
-              </button>
-              <button
-                onClick={capturePhoto}
-                className="w-16 h-16 rounded-full bg-primary flex items-center justify-center ring-4 ring-white"
-              >
-                <Camera className="text-white" size={28} />
+                <RotateCcw className="w-5 h-5 text-slate-800" />
               </button>
 
-              {/* Close Button */}
+              {/* Capture Button */}
+              <button
+                onClick={capturePhoto}
+                className=" w-16 h-16 rounded-full  bg-primary flex items-center justify-center ring-4 ring-white/90 shadow-xl shadow-primary/40 transition-all duration-200 hover:scale-105 active:scale-90 active:ring-2 relative"
+              >
+                <span className="absolute inset-0 rounded-full animate-ping bg-primary/30"></span>
+                <Camera className="text-white z-10" size={28} />
+              </button>
+
+              {/* Save Photos */}
+              {captures.length > 0 && (
+                <button
+                  onClick={savePhotos}
+                  className="  bg-emerald-600 p-3 rounded-full border-2 border-white shadow-lg shadow-emerald-600/30 transition-all duration-200 hover:scale-110 hover:bg-emerald-500 active:scale-95 ring-1 ring-white/40"
+                >
+                  <Check className="text-white w-5 h-5" />
+                </button>
+              )}
+
+              {/* Close Camera */}
               <button
                 onClick={() => {
                   setCaptures([]);
                   onClose();
                 }}
-                className="bg-white/90 p-3 rounded-full"
+                className=" bg-white/80 backdrop-blur-md p-3 rounded-full shadow-lg shadow-black/10 transition-all duration-200 hover:scale-110 hover:bg-red-50 active:scale-95 ring-1 ring-white/40 "
               >
-                <X />
+                <X className="w-5 h-5 text-slate-800" />
               </button>
             </div>
 
             {/* RIGHT CAPTURES PANEL */}
             {captures.length > 0 && (
-              <div className="absolute top-10 right-4 bottom-4 w-24 bg-black/40 backdrop-blur-md rounded-xl flex flex-col items-center py-3 gap-2 max-h-[75vh]">
-                {/* UP ARROW */}
-                {captures.length > 2 && (
-                  <ChevronUp className="text-white/80 mb-1" size={18} />
-                )}
+              <>
+                <div className="absolute top-10 right-4 bottom-4 w-24 bg-black/40 backdrop-blur-md rounded-xl flex flex-col items-center py-3 gap-2 max-h-[75vh]">
+                  {/* UP ARROW */}
+                  {captures.length > 2 && (
+                    <ChevronUp className="text-white/80 mb-1" size={18} />
+                  )}
 
-                {/* CAPTURES */}
-                <div className="flex-1 overflow-y-auto flex flex-col gap-2 px-1">
-                  {captures.map((img, i) => (
-                    <div key={i} className="relative group">
-                      <img
-                        src={img}
-                        alt="capture"
-                        className="h-16 w-16 rounded-lg object-cover border border-white/30"
-                      />
+                  {/* CAPTURES */}
+                  <div className="flex-1 overflow-y-auto flex flex-col gap-2 px-1">
+                    {captures.map((img, i) => (
+                      <div key={i} className="relative group">
+                        <img
+                          src={img}
+                          alt="capture"
+                          className="h-16 w-16 rounded-lg object-cover border border-white/30"
+                        />
 
-                      {/* Delete */}
-                      <button
-                        onClick={() =>
-                          setCaptures(captures.filter((_, idx) => idx !== i))
-                        }
-                        className="absolute -top-2 -right-2 bg-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
-                      >
-                        <Trash2 size={10} className="text-white" />
-                      </button>
-                    </div>
-                  ))}
+                        {/* Delete */}
+                        <button
+                          onClick={() =>
+                            setCaptures(captures.filter((_, idx) => idx !== i))
+                          }
+                          className="absolute top-0 right-0  p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                        >
+                          <X size={10} className="text-red-600" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* DOWN ARROW */}
+                  {captures.length > 1 && (
+                    <ChevronDown className="text-white/80 mt-1" size={18} />
+                  )}
                 </div>
-
-                {/* DOWN ARROW */}
-                {captures.length > 1 && (
-                  <ChevronDown className="text-white/80 mt-1" size={18} />
-                )}
-                {captures.length > 0 && (
-                  <button
-                    onClick={savePhotos}
-                    className="mt-2 bg-green-500 p-2 rounded-lg flex items-center justify-center w-full mx-5"
-                  >
-                    <Check size={16} className="text-white" />
-                  </button>
-                )}
-              </div>
+              </>
             )}
           </div>
 
