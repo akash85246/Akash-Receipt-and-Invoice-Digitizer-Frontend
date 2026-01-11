@@ -1,18 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { a } from "framer-motion/client";
+import api from "../../api/axios";
 
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async (_, { rejectWithValue }) => {
     try {
       const Backend_URL = import.meta.env.VITE_BACKEND_URL;
-      const res = await axios.get(`/api/auth/me`, {
-        withCredentials: true,
-      });
+      const res = await api.get("/api/auth/me");
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || "Failed to fetch user");
+      return rejectWithValue("unauthenticated");;
     }
   }
 );
@@ -68,6 +65,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
+        state.accessToken = null;
         state.error = action.payload;
       });
   },

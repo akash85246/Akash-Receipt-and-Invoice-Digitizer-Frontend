@@ -11,9 +11,10 @@ function ProtectedRoute() {
       </div>
     );
   }
-
+  console.log("ProtectedRoute - User ID:", id);
   
   if (!id) {
+
     return <Navigate to="/welcome" replace />;
   }
 

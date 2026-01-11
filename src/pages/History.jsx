@@ -27,7 +27,8 @@ import {
   Briefcase,
   Zap,
 } from "lucide-react";
-import axios from "axios";
+
+import api from "../api/axios";
 
 function History() {
   const dispatch = useDispatch();
@@ -172,9 +173,8 @@ function History() {
     if (selectedIds.length === 0) return;
 
     try {
-      const res = await axios.delete("/api/documents/delete-multiple", {
+      const res = await api.delete("/api/documents/delete-multiple/", {
         data: { ids: selectedIds },
-        withCredentials: true,
       });
 
       if (res.status === 200) {
@@ -435,7 +435,18 @@ function History() {
                   <div className="my-1 h-px bg-slate-100" />
 
                   {/* CATEGORY OPTIONS */}
-                  {["Food", "Travel", "Shopping", "Utilities", "Other"].map(
+                  {[
+                    "food",
+                    "travel",
+                    "shopping",
+                    "medical",
+                    "education",
+                    "entertainment",
+                    "housing",
+                    "business",
+                    "utilities",
+                    "other",
+                  ].map(
                     (cat) => (
                       <button
                         key={cat}

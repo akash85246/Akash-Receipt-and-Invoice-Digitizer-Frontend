@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../api/axios";
 
 export const fetchDocumentHistory = createAsyncThunk(
   "documentHistory/fetch",
   async (params, { rejectWithValue }) => {
     try {
-      const res = await axios.get("/api/documents/history", {
+      const res = await api.get("/api/documents/history/", {
         params,
-        withCredentials: true,
       });
       return res.data;
     } catch (err) {

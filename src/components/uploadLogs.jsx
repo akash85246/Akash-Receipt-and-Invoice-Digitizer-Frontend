@@ -11,8 +11,9 @@ function UploadLogs({ loading, setLoading }) {
     if (!loading) return;
 
     const token = user.accessToken;
+    const socketUrl = import.meta.env.VITE_SOCKET_URL
     const ws = new WebSocket(
-      `ws://localhost:8000/ws/upload-progress/?token=${token}`
+      `${socketUrl}/?token=${token}`
     );
     socketRef.current = ws;
 
@@ -60,16 +61,7 @@ function UploadLogs({ loading, setLoading }) {
 
   return (
     <div
-      className="
-    relative
-    p-5
-    rounded-xl
-    bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950
-    border border-slate-800
-    font-mono
-    text-emerald-400
-    mb-12
-  "
+      className="relative p-5 rounded-xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border border-slate-800 font-mono  text-emerald-400  mb-12"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
@@ -93,25 +85,12 @@ function UploadLogs({ loading, setLoading }) {
 
       {/* Logs */}
       <div
-        className="
-      h-48
-      overflow-y-auto
-      text-sm
-      space-y-1.5
-      pr-1
-      scrollbar-thin
-      scrollbar-thumb-slate-700
-      scrollbar-track-transparent
-    "
+        className=" h-48 overflow-y-auto text-sm space-y-1.5 pr-1 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent"
       >
         {logs.map((log, index) => (
           <div
             key={index}
-            className="
-          flex items-start gap-2
-          text-slate-300
-          animate-fade-in
-        "
+            className=" flex items-start gap-2  text-slate-300 animate-fade-in "
           >
             <span className="text-emerald-500">›</span>
             <span className="whitespace-pre-wrap leading-relaxed">{log}</span>
